@@ -1,0 +1,44 @@
+#ifndef TOKENS_HPP_
+#define TOKENS_HPP_
+  enum tokentype
+  {
+    BAD_STRING = -4,
+    UNCLOSED = -3, 
+    ERR = -2,
+    WS = -1,
+    VOID = 1,
+    INT = 2,
+    BYTE = 3,
+    B = 4,
+    BOOL = 5,
+    AND = 6,
+    OR = 7,
+    NOT = 8,
+    TRUE = 9,
+    FALSE = 10,
+    RETURN = 11,
+    IF = 12,
+    ELSE = 13,
+    WHILE = 14,
+    BREAK = 15,
+    CONTINUE = 16, 
+    SC = 17,
+    LPAREN = 18,
+    RPAREN = 19,
+    LBRACE = 20,
+    RBRACE = 21,
+    ASSIGN = 22,
+    RELOP = 23,
+    BINOP = 24,
+    COMMENT = 25,
+    ID = 26,
+    NUM = 27,
+    STRING = 28,
+    INNERSTRING = 29,
+    ENDOFSTRING = 30,
+  };
+  extern int yylineno;
+  extern char* yytext;
+  extern int yyleng;
+  extern int yylex();
+#endif /* TOKENS_HPP_ */
