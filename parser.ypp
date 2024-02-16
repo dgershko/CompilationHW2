@@ -12,14 +12,18 @@
 %}
 
 %start prog
-%nonassoc IF
-%token INT BYTE B BOOL TRUE FALSE RETURN BREAK CONTINUE WHILE SC ID NUM STRING LBRACE RBRACE
-%left ADD SUB
-%left MUL DIV 
-%left AND 
+%token INT BYTE B BOOL TRUE FALSE RETURN BREAK CONTINUE WHILE SC ID NUM STRING
+%nonassoc LBRACE RBRACE
+%right ASSIGN
 %left OR
-%right LPAREN RPAREN ASSIGN NOT 
-%nonassoc EQ NEQ GT GTE LT LTE
+%left AND
+%left EQ NEQ
+%left GT GTE LT LTE
+%left ADD SUB
+%left MUL DIV
+%right NOT
+%left LPAREN RPAREN
+%nonassoc IF
 %nonassoc ELSE
 
 %%
@@ -29,17 +33,17 @@ prog: stmts { printProductionRule(1); };
 stmts: stmt { printProductionRule(2); } | stmts stmt { printProductionRule(3); }; 
 
 stmt:
-    LBRACE stmts RBRACE { printProductionRule(4); } |
-    type ID SC { printProductionRule(5); } |
-    type ID ASSIGN expr SC { printProductionRule(6); } |
-    ID ASSIGN expr SC { printProductionRule(7); } |
-    call SC { printProductionRule(8); } |
-    RETURN SC { printProductionRule(9); } |
-    IF LPAREN expr RPAREN stmt { printProductionRule(10); } |
-    IF LPAREN expr RPAREN stmt ELSE stmt { printProductionRule(11); } |
-    WHILE LPAREN expr RPAREN stmt { printProductionRule(12); } |
-    BREAK SC { printProductionRule(13); } |
-    CONTINUE SC { printProductionRule(14); };
+    LBRACE stmts RBRACE                     { printProductionRule(4); } |
+    type ID SC                              { printProductionRule(5); } |
+    type ID ASSIGN expr SC                  { printProductionRule(6); } |
+    ID ASSIGN expr SC                       { printProductionRule(7); } |
+    call SC                                 { printProductionRule(8); } |
+    RETURN SC                               { printProductionRule(9); } |
+    IF LPAREN expr RPAREN stmt              { printProductionRule(10); } |
+    IF LPAREN expr RPAREN stmt ELSE stmt    { printProductionRule(11); } |
+    WHILE LPAREN expr RPAREN stmt           { printProductionRule(12); } |
+    BREAK SC                                { printProductionRule(13); } |
+    CONTINUE SC                             { printProductionRule(14); };
 
 call: ID LPAREN expr RPAREN { printProductionRule(15); };
 
@@ -50,29 +54,28 @@ type: INT { printProductionRule(16); } | BYTE {printProductionRule(17); } | BOOL
 /* binop: ADD | SUB | MUL | DIV; */
 
 expr:
-    LPAREN expr RPAREN { printProductionRule(19); } |
-    expr ADD expr { printProductionRule(20); } |
-    expr SUB expr { printProductionRule(20); } |
-    expr MUL expr { printProductionRule(20); } |
-    expr DIV expr { printProductionRule(20); } |
-    ID { printProductionRule(21); } |
-    call { printProductionRule(22); } |
-    NUM { printProductionRule(23); } |
-    NUM B { printProductionRule(24); } |
-    STRING { printProductionRule(25); } |
-    TRUE { printProductionRule(26); } |
-    FALSE { printProductionRule(27); } |
-    NOT expr { printProductionRule(28); } |
-    expr AND expr { printProductionRule(29); } |
-    expr OR expr { printProductionRule(30); } |
-    expr EQ expr { printProductionRule(31); } |
-    expr NEQ expr { printProductionRule(31); } |
-    expr GT expr { printProductionRule(31); } |
-    expr GTE expr { printProductionRule(31); } |
-    expr LT expr { printProductionRule(31); } |
-    expr LTE expr { printProductionRule(31); } |
+    LPAREN expr RPAREN      { printProductionRule(19); } |
+    expr ADD expr           { printProductionRule(20); } |
+    expr SUB expr           { printProductionRule(20); } |
+    expr MUL expr           { printProductionRule(20); } |
+    expr DIV expr           { printProductionRule(20); } |
+    ID                      { printProductionRule(21); } |
+    call                    { printProductionRule(22); } |
+    NUM                     { printProductionRule(23); } |
+    NUM B                   { printProductionRule(24); } |
+    STRING                  { printProductionRule(25); } |
+    TRUE                    { printProductionRule(26); } |
+    FALSE                   { printProductionRule(27); } |
+    NOT expr                { printProductionRule(28); } |
+    expr AND expr           { printProductionRule(29); } |
+    expr OR expr            { printProductionRule(30); } |
+    expr EQ expr            { printProductionRule(31); } |
+    expr NEQ expr           { printProductionRule(31); } |
+    expr GT expr            { printProductionRule(31); } |
+    expr GTE expr           { printProductionRule(31); } |
+    expr LT expr            { printProductionRule(31); } |
+    expr LTE expr           { printProductionRule(31); } |
     LPAREN type RPAREN expr { printProductionRule(32); };
-
 
 %%
 
