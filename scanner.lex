@@ -1,21 +1,20 @@
 %{
 // #include"tokens.hpp"
-#include "node.hpp"
-#include "source.tab.hpp"
+#include "parser.tab.hpp"
+#include "output.hpp"
 %}
 %option yylineno
 %option noyywrap
-binop (\+|-|\*|\/)
 digit ([0-9])
 num (0|[1-9]{digit}*)	
 letter ([a-zA-Z])
 whitespace ([\t\n\r ])
 string \"([^\n\r\"\\]|\\[rnt"\\])+\"
-relop (==|!=|<|>|<=|>=)
 id {letter}+({letter}|{digit})*
 %%
-{whitespace};
-int {yylval = };
+{whitespace} ;
+\/\/[^\r\n]*[ \r|\n|\r\n]? ;
+int return INT;
 byte return BYTE;
 b return B;
 bool return BOOL;
@@ -35,11 +34,19 @@ continue return CONTINUE;
 \) return RPAREN;
 "{" return LBRACE;
 "}" return RBRACE;
-= return ASSIGN;
-{relop} return RELOP;
-{binop} return BINOP;
+"=" return ASSIGN;
+"==" return EQ;
+"!=" return NEQ;
+">" return GT;
+">=" return GTE;
+"<" return LT;
+"<=" return LTE;
+"+" return ADD;
+"-" return SUB;
+"*" return MUL;
+"/" return DIV;
 {num} return NUM;
 {id}  return ID;
 {string} return STRING;
-. return ERR;
+.  { output::errorLex(yylineno); exit(0);};
 %%
